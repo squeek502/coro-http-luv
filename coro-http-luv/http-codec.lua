@@ -17,6 +17,7 @@ limitations under the License.
 --]]
 -- version = "3.0.4"
 
+local unpack = table.unpack or unpack
 local sub = string.sub
 local gsub = string.gsub
 local lower = string.lower

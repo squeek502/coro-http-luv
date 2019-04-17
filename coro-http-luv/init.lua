@@ -4,6 +4,7 @@
 
 local httpCodec = require('coro-http-luv.http-codec')
 local net = require('coro-http-luv.coro-net')
+local unpack = table.unpack or unpack
 
 local function createServer(host, port, onConnect)
   net.createServer({

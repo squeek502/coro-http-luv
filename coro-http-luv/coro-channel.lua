@@ -2,6 +2,8 @@
 -- Copyright (c) 2015 Tim Caswell
 -- version = "3.0.1"
 
+local unpack = table.unpack or unpack
+
 local function makeCloser(socket)
   local closer = {
     read = false,
