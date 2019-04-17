@@ -1,0 +1,31 @@
+language: c
+
+sudo: false
+
+matrix:
+  fast_finish: true
+
+env:
+  - LUA="lua 5.1"
+  - LUA="lua 5.2"
+  - LUA="lua 5.3"
+  - LUA="luajit 2.0"
+  - LUA="luajit 2.1"
+
+os:
+  - linux
+  - osx
+
+install:
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then pip install hererocks; else pip install --user hererocks; fi
+  - hererocks env --$LUA
+  - export PATH="$PWD/env/bin:$PWD/env:$PATH"
+  - luarocks install luv
+
+script:
+  - lua test/test-http.lua
+
+notifications:
+  email:
+    on_success: change
+    on_failure: always
