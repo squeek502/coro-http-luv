@@ -1,19 +1,9 @@
---[[lit-meta
-  name = "creationix/coro-http"
-  version = "3.1.0"
-  dependencies = {
-    "creationix/coro-net@3.0.0",
-    "luvit/http-codec@3.0.0"
-  }
-  homepage = "https://github.com/luvit/lit/blob/master/deps/coro-http.lua"
-  description = "An coro style http(s) client and server helper."
-  tags = {"coro", "http"}
-  license = "MIT"
-  author = { name = "Tim Caswell" }
-]]
+-- The MIT License (MIT)
+-- Copyright (c) 2015 Tim Caswell
+-- version = "3.1.0"
 
-local httpCodec = require('http-codec')
-local net = require('coro-net')
+local httpCodec = require('coro-http-luv.http-codec')
+local net = require('coro-http-luv.coro-net')
 
 local function createServer(host, port, onConnect)
   net.createServer({

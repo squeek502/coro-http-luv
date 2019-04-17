@@ -1,23 +1,10 @@
---[[lit-meta
-  name = "creationix/coro-net"
-  version = "3.2.0"
-  dependencies = {
-    "creationix/coro-channel@3.0.0",
-    "creationix/coro-wrapper@3.0.0",
-  }
-  optionalDependencies = {
-    "luvit/secure-socket@1.0.0"
-  }
-  homepage = "https://github.com/luvit/lit/blob/master/deps/coro-net.lua"
-  description = "An coro style client and server helper for tcp and pipes."
-  tags = {"coro", "tcp", "pipe", "net"}
-  license = "MIT"
-  author = { name = "Tim Caswell" }
-]]
+-- The MIT License (MIT)
+-- Copyright (c) 2015 Tim Caswell
+-- version = "3.2.0"
 
-local uv = require('uv')
-local wrapStream = require('coro-channel').wrapStream
-local wrapper = require('coro-wrapper')
+local uv = require('luv')
+local wrapStream = require('coro-http-luv.coro-channel').wrapStream
+local wrapper = require('coro-http-luv.coro-wrapper')
 local merger = wrapper.merger
 local decoder = wrapper.decoder
 local encoder = wrapper.encoder
@@ -102,7 +89,7 @@ local function connect(options)
   if not success then return nil, err end
   local dsocket
   if options.tls then
-    if not secureSocket then secureSocket = require('secure-socket') end
+    if not secureSocket then secureSocket = require('coro-http-luv.secure-socket') end
     dsocket, err = secureSocket(socket, options.tls)
     if not dsocket then
       return nil, err
@@ -144,7 +131,7 @@ local function createServer(options, onConnect)
       local success, failure = xpcall(function ()
         local dsocket
         if options.tls then
-          if not secureSocket then secureSocket = require('secure-socket') end
+          if not secureSocket then secureSocket = require('coro-http-luv.secure-socket') end
           dsocket = assert(secureSocket(socket, options.tls))
           dsocket.socket = socket
         else

@@ -1,14 +1,6 @@
---[[lit-meta
-  name = "creationix/coro-channel"
-  version = "3.0.1"
-  homepage = "https://github.com/luvit/lit/blob/master/deps/coro-channel.lua"
-  description = "An adapter for wrapping uv streams as coro-streams."
-  tags = {"coro", "adapter"}
-  license = "MIT"
-  author = { name = "Tim Caswell" }
-]]
-
--- local p = require('pretty-print').prettyPrint
+-- The MIT License (MIT)
+-- Copyright (c) 2015 Tim Caswell
+-- version = "3.0.1"
 
 local function makeCloser(socket)
   local closer = {
@@ -52,8 +44,6 @@ local function makeRead(socket, closer)
   local dindex = 0
 
   local function dispatch(data)
-
-    -- p("<-", data[1])
 
     if tindex > dindex then
       local thread = queue[dindex]
@@ -124,8 +114,6 @@ local function makeWrite(socket, closer)
     if closer.written then
       return nil, "already shutdown"
     end
-
-    -- p("->", chunk)
 
     if chunk == nil then
       closer.written = true

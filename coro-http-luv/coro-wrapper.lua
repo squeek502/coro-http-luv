@@ -1,12 +1,6 @@
---[[lit-meta
-  name = "creationix/coro-wrapper"
-  version = "3.1.0"
-  homepage = "https://github.com/luvit/lit/blob/master/deps/coro-wrapper.lua"
-  description = "An adapter for applying decoders to coro-streams."
-  tags = {"coro", "decoder", "adapter"}
-  license = "MIT"
-  author = { name = "Tim Caswell" }
-]]
+-- The MIT License (MIT)
+-- Copyright (c) 2015 Tim Caswell
+-- version = "3.1.0"
 
 local concat = table.concat
 local sub = string.sub

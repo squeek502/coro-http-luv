@@ -16,16 +16,7 @@ limitations under the License.
 
 --]]
 local openssl = require('openssl')
-
-local loadResource
-if type(module) == "table" then
-  function loadResource(path)
-    return module:load(path)
-  end
-else
-  loadResource = require('resource').load
-end
-local bit = require('bit')
+local bit = require('coro-http-luv.secure-socket.bit')
 
 local DEFAULT_SECUREPROTOCOL
 do
@@ -46,7 +37,7 @@ local DEFAULT_CIPHERS = 'TLS_AES_128_GCM_SHA256:TLS_AES_128_CCM_SHA256:' .. --TL
                         'RC4:HIGH:!MD5:!aNULL:!EDH'                         --TLS 1.0
 local DEFAULT_CA_STORE
 do
-  local data = assert(loadResource("./root_ca.dat"))
+  local data = require("coro-http-luv.secure-socket.root_ca")
   DEFAULT_CA_STORE = openssl.x509.store:new()
   local index = 1
   local dataLength = #data

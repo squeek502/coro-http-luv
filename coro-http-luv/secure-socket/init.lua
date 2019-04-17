@@ -15,8 +15,8 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 --]]
-local getContext = require('./context')
-local bioWrap = require('./biowrap')
+local getContext = require('coro-http-luv.secure-socket.context')
+local bioWrap = require('coro-http-luv.secure-socket.biowrap')
 
 return function (socket, options, callback)
   if options == true then options = {} end
