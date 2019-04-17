@@ -20,12 +20,14 @@ before_install:
   - hererocks env --$LUA -rlatest
   - source env/bin/activate
   - luarocks install luv
+  - luarocks install openssl
 
 install:
   - luarocks make
 
 script:
   - lua tests/test-http.lua
+  - lua tests/test-https.lua
 
 notifications:
   email:
