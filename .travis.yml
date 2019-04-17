@@ -31,6 +31,7 @@ before_install:
   - make install_sw
   - cd $TRAVIS_BUILD_DIR
   - luarocks install openssl OPENSSL_DIR=$HOME/openssl
+  - if [ "$LUA" = "lua 5.1" ]; then luarocks install luabitop; fi
 
 install:
   - luarocks make
