@@ -28,7 +28,7 @@ before_install:
   - cd openssl-1.0.2r
   - ./config --prefix=$HOME/openssl no-threads no-zlib no-asm -fPIC shared
   - make
-  - make install
+  - make install_sw
   - cd $TRAVIS_BUILD_DIR
   - luarocks install openssl OPENSSL_DIR=$HOME/openssl
 
