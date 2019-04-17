@@ -29,7 +29,7 @@ before_install:
   - make
   - make install
   - cd $TRAVIS_BUILD_DIR
-  - CFLAGS="-I$HOME/openssl/include" LDFLAGS="-L$HOME/openssl/lib" luarocks install openssl
+  - OPENSSL_DIR=$HOME/openssl luarocks install openssl
 
 install:
   - luarocks make
