@@ -15,11 +15,14 @@ env:
 os:
   - linux
 
-install:
+before_install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then pip install hererocks; else pip install --user hererocks; fi
   - hererocks env --$LUA -rlatest
   - source env/bin/activate
   - luarocks install luv
+
+install:
+  - luarocks make
 
 script:
   - lua tests/test-http.lua
