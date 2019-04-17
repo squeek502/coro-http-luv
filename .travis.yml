@@ -14,11 +14,10 @@ env:
 
 os:
   - linux
-  - osx
 
 install:
   - if [ "$TRAVIS_OS_NAME" = "osx" ]; then pip install hererocks; else pip install --user hererocks; fi
-  - hererocks env --$LUA
+  - hererocks env --$LUA -rlatest
   - export PATH="$PWD/env/bin:$PWD/env:$PATH"
   - luarocks install luv
 
