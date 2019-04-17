@@ -22,14 +22,15 @@ before_install:
   - source env/bin/activate
   - luarocks install luv
   # Ubuntu 16.04 OpenSSL 1.0.2g is bugged and won't work with lua-openssl, so install from source
+  # https://github.com/zhaozg/lua-openssl/issues/94
   - wget https://www.openssl.org/source/openssl-1.0.2r.tar.gz
   - tar xzvf openssl-1.0.2r.tar.gz
   - cd openssl-1.0.2r
-  - ./config --prefix=$HOME/openssl no-threads no-zlib no-shared no-asm
+  - ./config --prefix=$HOME/openssl no-threads no-zlib no-asm -fPIC shared
   - make
   - make install
   - cd $TRAVIS_BUILD_DIR
-  - OPENSSL_DIR=$HOME/openssl luarocks install openssl
+  - luarocks install openssl OPENSSL_DIR=$HOME/openssl
 
 install:
   - luarocks make
