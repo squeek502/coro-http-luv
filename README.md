@@ -15,6 +15,7 @@ coro-http-luv
 
 ## Installation
 
+Via [Luarocks](http://luarocks.org/modules/squeek502/coro-http-luv):
 ```
 luarocks install coro-http-luv
 ```
