@@ -23,7 +23,7 @@ luarocks install coro-http-luv
 ## Changes from the Lit version
 
 - Everything is now in a `coro-http-luv` module, e.g. `http-codec` is now `require`'d as `coro-http-luv.http-codec`
-- `root_ca.dat` in `secure-socket` replaced with `root_ca.lua`, which uses a base64 encoded string for the binary data and returns a decoded version of it
+- `root_ca.dat` in `secure-socket` replaced with `root_ca.lua`, which uses a string literal for the binary data (encoded by [arbitrary-binary-string](https://github.com/squeek502/lua-arbitrary-binary-string))
 - Bitwise operations in `secure-socket` will use whatever is available (Lua 5.3 operators, 'bit32', or 'bit')
 - `require('uv')` replaced with `require('luv')`
 
