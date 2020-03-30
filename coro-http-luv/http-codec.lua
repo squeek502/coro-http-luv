@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 --]]
--- version = "3.0.4"
+-- version = "3.0.5"
 
 local unpack = table.unpack or unpack
 local sub = string.sub
@@ -175,7 +175,7 @@ local function decoder()
     local _, offset
     local version
     _, offset, version, head.code, head.reason =
-      find(chunk, "^HTTP/(%d%.%d) (%d+) ([^\r\n]+)\r?\n", index)
+      find(chunk, "^HTTP/(%d%.%d) (%d+) ([^\r\n]*)\r?\n", index)
     if offset then
       head.code = tonumber(head.code)
     else
