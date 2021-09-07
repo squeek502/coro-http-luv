@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 --]]
--- version = "3.0.5"
+-- version = "3.0.6"
 
 local unpack = table.unpack or unpack
 local sub = string.sub

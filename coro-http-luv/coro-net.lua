@@ -1,6 +1,6 @@
 -- The MIT License (MIT)
 -- Copyright (c) 2015 Tim Caswell
--- version = "3.2.0"
+-- version = "3.3.0"
 
 local uv = require('luv')
 local wrapStream = require('coro-http-luv.coro-channel').wrapStream
@@ -9,6 +9,13 @@ local merger = wrapper.merger
 local decoder = wrapper.decoder
 local encoder = wrapper.encoder
 local secureSocket -- Lazy required from "secure-socket" on first use.
+
+local function assertResume(thread, ...)
+  local success, err = coroutine.resume(thread, ...)
+  if not success then
+    error(debug.traceback(thread, err), 0)
+  end
+end
 
 local function makeCallback(timeout)
   local thread = coroutine.running()
@@ -19,7 +26,7 @@ local function makeCallback(timeout)
       if done then return end
       done = true
       timer:close()
-      return assert(coroutine.resume(thread, nil, "timeout"))
+      return assertResume(thread, nil, "timeout")
     end)
   end
   return function (err, data)
@@ -27,9 +34,9 @@ local function makeCallback(timeout)
     done = true
     if timer then timer:close() end
     if err then
-      return assert(coroutine.resume(thread, nil, err))
+      return assertResume(thread, nil, err)
     end
-    return assert(coroutine.resume(thread, data or true))
+    return assertResume(thread, data or true)
   end
 end
 
@@ -104,10 +111,14 @@ local function connect(options)
     -- TODO: Should we expose updateScan somehow?
     read = merger(read, options.scan)
   end
-  if options.decode then
+  if options.decoder then
+    read, updateDecoder = decoder(read, options.decoder())
+  elseif options.decode then
     read, updateDecoder = decoder(read, options.decode)
   end
-  if options.encode then
+  if options.encoder then
+    write, updateEncoder = encoder(write, options.encoder())
+  elseif options.encode then
     write, updateEncoder = encoder(write, options.encode)
   end
   return read, write, dsocket, updateDecoder, updateEncoder, close
@@ -144,10 +155,14 @@ local function createServer(options, onConnect)
           -- TODO: should we expose updateScan somehow?
           read = merger(read, options.scan)
         end
-        if options.decode then
+        if options.decoder then
+          read, updateDecoder = decoder(read, options.decoder())
+        elseif options.decode then
           read, updateDecoder = decoder(read, options.decode)
         end
-        if options.encode then
+        if options.encoder then
+          write, updateEncoder = encoder(write, options.encoder())
+        elseif options.encode then
           write, updateEncoder = encoder(write, options.encode)
         end
 

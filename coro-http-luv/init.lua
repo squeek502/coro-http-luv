@@ -1,6 +1,6 @@
 -- The MIT License (MIT)
 -- Copyright (c) 2015 Tim Caswell
--- version = "3.1.0"
+-- version = "3.2.2"
 
 local httpCodec = require('coro-http-luv.http-codec')
 local net = require('coro-http-luv.coro-net')
@@ -10,8 +10,8 @@ local function createServer(host, port, onConnect)
   return net.createServer({
     host = host,
     port = port,
-    encode = httpCodec.encoder(),
-    decode = httpCodec.decoder(),
+    encoder = httpCodec.encoder,
+    decoder = httpCodec.decoder,
   }, function (read, write, socket)
     for head in read do
       local parts = {}
@@ -29,6 +29,7 @@ local function createServer(host, port, onConnect)
       write("")
       if not head.keepAlive then break end
     end
+    write()
   end)
 end
 
@@ -67,8 +68,8 @@ local function getConnection(host, port, tls, timeout)
     port = port,
     tls = tls,
     timeout = timeout,
-    encode = httpCodec.encoder(),
-    decode = httpCodec.decoder()
+    encoder = httpCodec.encoder,
+    decoder = httpCodec.decoder
   })
   return {
     socket = socket,
@@ -93,9 +94,19 @@ local function saveConnection(connection)
   connection.socket:unref()
 end
 
-local function request(method, url, headers, body, timeout)
+local function request(method, url, headers, body, customOptions)
+  -- customOptions = { timeout = number, followRedirects = boolean }
+  local options = {}
+  if type(customOptions) == "number" then
+    -- Ensure backwards compatibility, where customOptions used to just be timeout
+    options.timeout = customOptions
+  else
+    options = customOptions or {}
+  end
+  options.followRedirects = options.followRedirects == nil and true or options.followRedirects -- Follow any redirects, Default: true
+
   local uri = parseUrl(url)
-  local connection = getConnection(uri.hostname, uri.port, uri.tls, timeout)
+  local connection = getConnection(uri.hostname, uri.port, uri.tls, options.timeout)
   local read = connection.read
   local write = connection.write
 
@@ -165,7 +176,7 @@ local function request(method, url, headers, body, timeout)
   end
 
   -- Follow redirects
-  if method == "GET" and (res.code == 302 or res.code == 307) then
+  if method == "GET" and (res.code == 302 or res.code == 307) and options.followRedirects then
     for i = 1, #res do
       local key, location = unpack(res[i])
       if key:lower() == "location" then
