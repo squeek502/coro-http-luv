@@ -1,0 +1,33 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lua: [5.1, 5.2, 5.3, luajit]
+    env:
+      LUA: ${{ matrix.lua }}
+
+    steps:
+    - uses: actions/checkout@v2
+    - uses: leafo/gh-actions-lua@v8
+      with:
+        luaVersion: ${{ matrix.lua }}
+    - uses: leafo/gh-actions-luarocks@v4
+
+    - name: Setup
+      run: |
+        luarocks install luv
+        luarocks install openssl
+        if [ "$LUA" = "5.1" ]; then luarocks install luabitop; fi
+
+    - name: Build
+      run: luarocks make
+
+    - name: Test
+      run: |
+        lua tests/test-http.lua
+        lua tests/test-https.lua

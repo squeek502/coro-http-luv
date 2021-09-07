@@ -1,7 +1,7 @@
 coro-http-luv
 =============
 
-[![Build Status](https://travis-ci.org/squeek502/coro-http-luv.svg?branch=master)](https://travis-ci.org/squeek502/coro-http-luv)
+[![CI](https://github.com/squeek502/coro-http-luv/actions/workflows/ci.yml/badge.svg)](https://github.com/squeek502/coro-http-luv/actions/workflows/ci.yml)
 
 `coro-http` from [Lit](https://github.com/luvit/lit) converted to work with plain Lua + [Luv](https://github.com/luvit/luv).
 
